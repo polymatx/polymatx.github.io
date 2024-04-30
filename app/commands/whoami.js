@@ -28,8 +28,7 @@ const whoami = {
     );
     term.writeln(
       colorize(TermColors.Green, "About: ") +
-      "I am passionate about writing codes and \n" +
-      "developing applications to solve real-life challenges.\n" +
+      "I am passionate about writing codes and developing applications to solve real-life challenges. " +
       "I also work in configuring the infrastructure of applications."
     );
     term.writeln(
