@@ -40,6 +40,7 @@ export function isPrintableKeyCode(keyCode) {
 }
 
 /**
+ * @param term
  * @param {string} input
  * @returns {string}
  */

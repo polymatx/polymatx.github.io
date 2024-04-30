@@ -16,7 +16,7 @@ const randc = {
       const res = await fetch(api, {
         signal: controller.signal,
         headers: {
-          apiKey: '380794ef-b3c5-4a5a-b4b1-375b576c5b01',
+          apiKey: 'live_DVl3eU0RpH9pzYJ3tPfJmeCBY1hrEmZJEBdrbfmBg36tcNbIALC3zXhFUyfgAiWu',
         },
       });
       clearTimeout(id);

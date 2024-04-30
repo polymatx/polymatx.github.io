@@ -5,23 +5,23 @@ import fileSystem from "../file-system.js";
 const WebApps = [
   {
     name: "blog",
-    url: "https://protiumx.dev/blog/posts",
+    url: "https://polymatx.dev/blog/posts",
   },
   {
     name: "github",
-    url: "https://github.com/protiumx/",
+    url: "https://github.com/polymatx/",
   },
   {
     name: "instagram",
-    url: "https://www.instagram.com/_protium/",
+    url: "https://www.instagram.com/_polymatx/",
   },
   {
     name: "linkedin",
-    url: "https://www.linkedin.com/in/bdmayo/",
+    url: "https://www.linkedin.com/in/polymatx/",
   },
   {
     name: "source",
-    url: "https://github.com/protiumx/protiumx.github.io",
+    url: "https://github.com/polymatx/polymatx.github.io",
   },
 ];
 

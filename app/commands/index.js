@@ -2,27 +2,21 @@ import { TermColors } from "../constants.js";
 import { colorize, getSpacing } from "../utils.js";
 
 import cat from "./cat.js";
-import cowsay from "./cowsay.js";
 import download from "./download.js";
 import exit from "./exit.js";
 import ls from "./ls.js";
 import open from "./open.js";
 import randc from "./randc.js";
-import rm from "./rm.js";
-import simia from "./simia.js";
 import uname from "./uname.js";
 import whoami from "./whoami.js";
 
 const SystemCommands = [
   cat,
-  cowsay,
   download,
   exit,
   ls,
   open,
   randc,
-  rm,
-  simia,
   uname,
   whoami,
 

@@ -1,5 +1,5 @@
 // Octal codes are not allowed in strict mode.
-// Hence the hexadecimal escape sequence
+// Hence, the hexadecimal escape sequence
 export const TermColors = {
   Red: "\x1B[1;31m",
   Green: "\x1B[1;32m",

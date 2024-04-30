@@ -8,10 +8,10 @@ const whoami = {
   args: 0,
   description: "display effective developer info",
   async exec(term, _args) {
-    term.writeln(colorize(TermColors.Green, "name: ") + "brian");
+    term.writeln(colorize(TermColors.Green, "name: ") + "Farid");
     term.writeln(
       colorize(TermColors.Green, "current position: ") +
-      "cloud engineer"
+      "Backend Developer / DevOps"
     );
     term.writeln(
       colorize(TermColors.Green, "company: ") +
@@ -27,7 +27,7 @@ const whoami = {
       "[photography, music, electronics]"
     );
     term.writeln(
-      colorize(TermColors.Green, "blog: ") + "https://protiumx.dev/blog"
+      colorize(TermColors.Green, "blog: ") + "https://polymatx.dev/blog"
     );
     term.writeln(colorize(TermColors.Green, "last update: ") + LAST_UPDATE);
   },

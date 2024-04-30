@@ -1,24 +1,80 @@
-# protiumx.github.io
+# polymatx.github.io
 
-my info terminal website
+Website: https://polymatx.dev
 
 ## Dev
-Requires `python3`
+Requires `python3` and `golang`
 
 ```sh
 make dev
 ```
 
-## Simia REPL
-The command `simia` loads a web assambly module of the [simia lang](https://github.com/protiumx/simia)
 
-## License
-Dual license: MIT and [creative commons](https://creativecommons.org/licenses/by-nc-nd/4.0/).
+### Setting up GoLang and wasm_exec.js
+#### Installing GoLang
+GoLang is required to compile and manage WebAssembly modules using Go. Here's how to install Go:
 
-Copyright 2022 Brian Mayo
+```shell
+sudo add-apt-repository ppa:longsleep/golang-backports
+sudo apt update
+sudo apt install golang-go
+```
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Once installed, verify the installation with:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+```shell
+go version
+```
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#### wasm_exec.js
+`wasm_exec.js` is provided by the Go installation and is used to support Go's WebAssembly binaries in the web environment. It emulates a Go environment within the browser, handling tasks like memory management and system calls.
+
+To run your server in the background continuously, especially on a VPS, you can use a variety of methods. Here are a few common approaches that are suitable for production or semi-production environments:
+
+1. Using nohup Command
+    ```sh
+    nohup make dev &
+    ```
+2. Using screen or tmux
+    ```shell
+    screen -S server
+    make dev
+    # Press Ctrl+A then D to detach
+    screen -r server
+   ```
+    ```shell
+    tmux new -s server
+    make dev
+    # Press Ctrl+B then D to detach
+    tmux attach -t server
+   ```
+3. Using Systemd (Recommended for Production)
+   1. Create a systemd service file:
+
+      ```shell
+      nano /etc/systemd/system/website.service
+      ```
+      ```shell
+      [Unit]
+      Description=Website Terminal
+
+      [Service]
+      ExecStart=/usr/bin/make -C /path/to/your/project/dir dev
+      WorkingDirectory=/path/to/your/project/dir
+      User=your-user
+      Restart=always
+
+      [Install]
+      WantedBy=multi-user.target
+      ```
+   2. Enable and start your service:
+      ```shell
+      sudo systemctl enable website.service
+      sudo systemctl start website.service
+      ```
+   3. Check service status is OK or not  
+      ```shell
+      sudo systemctl status website.service
+      journalctl -u myservice.service
+      ```
+   
