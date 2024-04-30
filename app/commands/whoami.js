@@ -15,16 +15,22 @@ const whoami = {
     );
     term.writeln(
       colorize(TermColors.Green, "company: ") +
-      "CrowdStrike < https://crowdstrike.com >"
+      "SigmaTelecom < https://www.sigmatelecom.com >"
     );
-    term.writeln(colorize(TermColors.Green, "location: ") + "Munich, Germany");
+    term.writeln(colorize(TermColors.Green, "location: ") + "Istanbul, Turkey");
     term.writeln(
       colorize(TermColors.Green, "fav languages: ") +
-      "[golang, rust, c]"
+      "[golang, JS (NodeJs), PHP]"
     );
     term.writeln(
       colorize(TermColors.Green, "hobbies: ") +
-      "[photography, music, electronics]"
+      "[photography, music, movie, gym]"
+    );
+    term.writeln(
+      colorize(TermColors.Green, "About: ") +
+      "I am passionate about writing codes and \n" +
+      "developing applications to solve real-life challenges.\n" +
+      "I also work in configuring the infrastructure of applications."
     );
     term.writeln(
       colorize(TermColors.Green, "blog: ") + "https://polymatx.dev/blog"
