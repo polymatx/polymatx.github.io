@@ -94,7 +94,10 @@ function createOnKeyHandler(term) {
 
 
   return async ({ key, domEvent: ev }) => {
+    console.log(`Key pressed: ${ev.key}, KeyCode: ${ev.keyCode}`);
+
     if (currentProcessId !== null) {
+      console.log('Process is active, ignoring other inputs.');
       return;
     }
 
@@ -172,6 +175,17 @@ function createOnKeyHandler(term) {
   };
 }
 
+function attachKeyListeners(term) {
+  const handler = createOnKeyHandler(term);
+
+  // Using 'keydown' event directly to capture input
+  term.textarea.addEventListener('keydown', (ev) => {
+    handler({key: ev.key, domEvent: ev}).then(r => console.log({key: ev.key, domEvent: ev}));
+  });
+
+  term.onKey(handler);
+}
+
 async function runTerminal() {
   const container = document.getElementById("term");
   const term = new Terminal({
@@ -206,7 +220,8 @@ async function runTerminal() {
 
   await initTerminalSession(term);
 
-  term.onKey(createOnKeyHandler(term));
+  // Attach key listeners after the terminal is opened and ready
+  attachKeyListeners(term);
 }
 
 window.onload = function() {
