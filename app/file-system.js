@@ -12,12 +12,6 @@ const Files = [
     deleted: false,
     downloadName: 'farid_resume.pdf',
   },
-  {
-    name: 'projects.md',
-    deleted: false,
-    path: '/files/projects.md',
-    content: ''
-  }
 ];
 
 
