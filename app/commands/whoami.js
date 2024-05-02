@@ -24,7 +24,7 @@ const whoami = {
     );
     term.writeln(
       colorize(TermColors.Green, "hobbies: ") +
-      "[photography, music, movie, gym]"
+      "[music, movie, gym]"
     );
     term.writeln(
       colorize(TermColors.Green, "About: ") +
