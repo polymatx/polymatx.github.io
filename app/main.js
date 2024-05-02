@@ -1,6 +1,6 @@
 import { HistorySize, TermColors, SHELL_PROMPT } from "./constants.js";
 import fileSystem from "./file-system.js";
-import { handleBackspace, isPrintableKeyCode, sleep } from "./utils.js";
+import { colorize, handleBackspace, isPrintableKeyCode, sleep } from "./utils.js";
 import { exec } from "./commands/index.js";
 import { exec as exit } from "./commands/exit.js";
 
@@ -22,7 +22,7 @@ function deleteCurrentInput(term, input) {
 
 async function initTerminalSession(term) {
   term.writeln(
-    'Hi cybernaut. this is an info terminal.\r\nuse "help" to see the available commands'
+    'Hi cybernaut. this is an info terminal.\r\nuse ' + colorize(TermColors.Green, "help") + 'to see the available commands'
   );
   term.writeln("creating new session...");
   await sleep(1300);
