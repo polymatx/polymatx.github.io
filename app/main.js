@@ -21,13 +21,16 @@ function deleteCurrentInput(term, input) {
 }
 
 async function initTerminalSession(term) {
-  term.writeln('Hi cybernaut. This is an info terminal.\r\nUse ' + colorize(TermColors.Green, '"help"') + ' to see the available commands');
-  term.writeln("Creating new session...");
+  term.writeln(
+    'Hi cybernaut. this is an info terminal.\r\nuse ' + colorize(TermColors.Green, '"help"') + ' to see the available commands'
+  );
+  term.writeln("creating new session...");
   await sleep(1300);
-  prompt(term);
+  term.write(SHELL_PROMPT);
 }
 
 function pushCommandToHistory(store, command) {
+  // Avoid duplicates with last command
   if (store.length > 0 && store[store.length - 1] === command) {
     return;
   }
@@ -52,9 +55,12 @@ function loadCommandHistory() {
 }
 
 function createOnKeyHandler(term) {
+  // Track the user input
   let userInput = "";
+  // Track command history
   let commandHistory = loadCommandHistory();
   let currentHistoryPosition = commandHistory.length;
+  // Only one process at a time
   let currentProcessId = null;
 
   function onProcessExit() {
@@ -70,6 +76,7 @@ function createOnKeyHandler(term) {
     }
 
     term.writeln("");
+
     try {
       currentProcessId = await exec(term, userInput, onProcessExit);
     } catch (e) {
@@ -78,60 +85,104 @@ function createOnKeyHandler(term) {
 
     pushCommandToHistory(commandHistory, userInput);
     currentHistoryPosition = commandHistory.length;
+
     userInput = "";
     if (currentProcessId === null) {
       prompt(term);
     }
   }
 
+
   return async ({ key, domEvent: ev }) => {
     console.log(`Key pressed: ${ev.key}, KeyCode: ${ev.keyCode}`);
+
     if (currentProcessId !== null) {
       console.log('Process is active, ignoring other inputs.');
       return;
     }
 
-    if (ev.key === "Enter" || ev.keyCode === 13) {
-      ev.preventDefault();
-      await handleEnter();
-      return;
-    }
-
     switch (ev.key) {
       case "ArrowUp":
-      case "ArrowDown":
-        navigateHistory(ev.key);
-        break;
-      case "c":
-        if (ev.ctrlKey) { term.clear(); }
-        break;
-      case "Backspace":
-        userInput = handleBackspace(term, userInput);
-        break;
-      default:
-        if (!ev.ctrlKey && !ev.altKey && !ev.metaKey && isPrintableKeyCode(ev.keyCode)) {
-          term.write(key);
-          userInput += key;
+      case "ArrowDown": {
+        if (commandHistory.length === 0) {
+          return;
         }
+
+        if (ev.key === "ArrowDown") {
+          if (currentHistoryPosition === commandHistory.length) return;
+
+          currentHistoryPosition = Math.min(
+            commandHistory.length,
+            currentHistoryPosition + 1
+          );
+        } else {
+          currentHistoryPosition = Math.max(0, currentHistoryPosition - 1);
+        }
+
+        deleteCurrentInput(term, userInput);
+        if (currentHistoryPosition === commandHistory.length) {
+          userInput = "";
+        } else {
+          userInput = commandHistory[currentHistoryPosition];
+        }
+        term.write(userInput);
+        return;
+      }
+
+      case "c": {
+        if (ev.ctrlKey) {
+          prompt(term);
+          userInput = "";
+          currentHistoryPosition = commandHistory.length;
+          return;
+        }
+        break;
+      }
+
+      case "l": {
+        if (ev.ctrlKey) {
+          term.clear();
+          return;
+        }
+        break;
+      }
+
+      case "d": {
+        if (ev.ctrlKey) {
+          await exit(term);
+          return;
+        }
+        break;
+      }
+
+      case "Backspace": {
+        userInput = handleBackspace(term, userInput);
+        return;
+      }
+
+      case "Enter":
+      case 13:
+        await handleEnter();
+        break;
+    }
+
+    const hasModifier = ev.altKey || ev.altGraphKey || ev.ctrlKey || ev.metaKey;
+
+    if (!hasModifier && isPrintableKeyCode(ev.keyCode)) {
+      term.write(key);
+      userInput += key;
     }
   };
-
-  function navigateHistory(key) {
-    if (commandHistory.length === 0) { return; }
-    if (key === "ArrowDown" && currentHistoryPosition < commandHistory.length) {
-      currentHistoryPosition++;
-    } else if (key === "ArrowUp" && currentHistoryPosition > 0) {
-      currentHistoryPosition--;
-    }
-    userInput = commandHistory[currentHistoryPosition] || "";
-    deleteCurrentInput(term, userInput);
-    term.write(userInput);
-  }
 }
 
 function attachKeyListeners(term) {
   const handler = createOnKeyHandler(term);
-  term.textarea.addEventListener('keydown', (ev) => handler({ key: ev.key, domEvent: ev }));
+
+  // Using 'keydown' event directly to capture input
+  term.textarea.addEventListener('keydown', (ev) => {
+    handler({key: ev.key, domEvent: ev}).then(r => console.log({key: ev.key, domEvent: ev}));
+  });
+
   term.onKey(handler);
 }
 
@@ -155,16 +206,21 @@ async function runTerminal() {
       brightYellow: "#f2ca29",
       red: "#cf442b",
       brightRed: "#cf442b",
-    }
+    },
   });
 
   const fitAddon = new window.FitAddon.FitAddon();
   term.loadAddon(fitAddon);
   term.loadAddon(new window.WebLinksAddon.WebLinksAddon());
+
   term.open(container);
+
   fitAddon.fit();
   term.focus();
+
   await initTerminalSession(term);
+
+  // Attach key listeners after the terminal is opened and ready
   attachKeyListeners(term);
 }
 
