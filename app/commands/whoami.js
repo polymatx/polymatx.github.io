@@ -23,6 +23,10 @@ const whoami = {
       "[PHP, JS (NodeJs), golang]"
     );
     term.writeln(
+      colorize(TermColors.Green, "fav OS: ") +
+      "[Linux]"
+    );
+    term.writeln(
       colorize(TermColors.Green, "hobbies: ") +
       "[music, movie, gym]"
     );
