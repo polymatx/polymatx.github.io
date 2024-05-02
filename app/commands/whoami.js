@@ -20,7 +20,7 @@ const whoami = {
     term.writeln(colorize(TermColors.Green, "location: ") + "Istanbul, Turkey");
     term.writeln(
       colorize(TermColors.Green, "fav languages: ") +
-      "[golang, JS (NodeJs), PHP]"
+      "[PHP, JS (NodeJs), golang]"
     );
     term.writeln(
       colorize(TermColors.Green, "hobbies: ") +
