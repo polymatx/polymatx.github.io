@@ -68,6 +68,31 @@ function createOnKeyHandler(term) {
     currentProcessId = null;
   }
 
+  async function handleEnter() {
+    userInput = userInput.trim();
+    if (userInput.length === 0) {
+      prompt(term);
+      return;
+    }
+
+    term.writeln("");
+
+    try {
+      currentProcessId = await exec(term, userInput, onProcessExit);
+    } catch (e) {
+      printError(term, e.message);
+    }
+
+    pushCommandToHistory(commandHistory, userInput);
+    currentHistoryPosition = commandHistory.length;
+
+    userInput = "";
+    if (currentProcessId === null) {
+      prompt(term);
+    }
+  }
+
+
   return async ({ key, domEvent: ev }) => {
     if (currentProcessId !== null) {
       return;
@@ -132,57 +157,10 @@ function createOnKeyHandler(term) {
         return;
       }
 
-      case "Enter": {
-        userInput = userInput.trim();
-        if (userInput.length === 0) {
-          userInput = "";
-          prompt(term);
-          return;
-        }
-
-        term.writeln("");
-
-        try {
-          currentProcessId = await exec(term, userInput, onProcessExit);
-        } catch (e) {
-          printError(term, e.message);
-        }
-
-        pushCommandToHistory(commandHistory, userInput);
-        currentHistoryPosition = commandHistory.length;
-
-        userInput = "";
-        if (currentProcessId === null) {
-          prompt(term);
-        }
-        return;
-      }
-
-      case 13: {
-        userInput = userInput.trim();
-        if (userInput.length === 0) {
-          userInput = "";
-          prompt(term);
-          return;
-        }
-
-        term.writeln("");
-
-        try {
-          currentProcessId = await exec(term, userInput, onProcessExit);
-        } catch (e) {
-          printError(term, e.message);
-        }
-
-        pushCommandToHistory(commandHistory, userInput);
-        currentHistoryPosition = commandHistory.length;
-
-        userInput = "";
-        if (currentProcessId === null) {
-          prompt(term);
-        }
-        return;
-      }
+      case "Enter":
+      case 13:
+        await handleEnter();
+        break;
     }
 
     const hasModifier = ev.altKey || ev.altGraphKey || ev.ctrlKey || ev.metaKey;
