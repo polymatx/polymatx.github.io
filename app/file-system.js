@@ -2,7 +2,7 @@ const Files = [
   {
     name: 'blog.md',
     content: '',
-    path: '/blog.md',
+    path: '/files/blog.md',
     deleted: false,
   },
   {
